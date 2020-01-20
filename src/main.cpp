@@ -9,12 +9,13 @@ int main()
 {
 	int vertices = 10;
 	srand(time(NULL));
-	int edges = rand() % (vertices * (vertices - 1) / 2) + (vertices - 1);
-	vector<Vertex<int>> Vertices;
+	//int edges = rand() % (vertices * (vertices - 1) / 2) + (vertices - 1);
+	int edges = 15;
+	vector<Vertex> Vertices;
 
 	for (int i = 0; i < vertices; i++)
 	{
-		Vertices.push_back(*(make_shared<Vertex<int>>()));
+		Vertices.push_back(*(make_shared<Vertex>()));
 	}
 
 	//cout << Vertices.front().id << endl;
@@ -50,21 +51,37 @@ int main()
 	//auto it = G.graph.begin();
 	//std::advance(it, int(rand() % G.graph.size()));
 	//it->first.id = 3;
-	//G.getRandomVertex().data = 10;
-	Graph<int> G;
+	Graph G;
+	//cout << std::next(G.graph.begin(), G.graph.size() - 1)->first.id << endl;
 	G.generateChordal(Vertices, edges);
+	// for (auto v : G.graph)
+	// {
+	// 	for (auto u : G.graph)
+	// 	{
+	// 		if (!G.isAdjacent(v.first, u.first))
+	// 		{
+	// 			cout << v.first.id << "!~" << u.first.id << endl;
+	// 		}
+	// 	}
+	// 	cout << endl;
+	// }
+
 	for (auto v : G.graph)
 	{
 		cout << v.first.id << ": ";
 		for (auto v2 : v.second)
 		{
-			cout << v2.first << " ";
+			cout << v2.first.id << " ";
 		}
 		cout << endl;
 		//v.first.id = 3;
 	}
 	cout << endl;
-	G.insert_query(Vertices[7], Vertices[6]);
+	cout << "edges:" << edges << endl;
 
+	// if (G.BFS(Vertices[3], Vertices[1]))
+	// {
+	// 	cout << "The " << Vertices[3].id << "~" << Vertices[1].id << " exists!" << endl;
+	// }
 	//cout << hashVertex(Vertices[2]) << endl;
 }
