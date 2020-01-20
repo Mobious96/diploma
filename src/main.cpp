@@ -5,12 +5,27 @@
 
 using namespace std;
 
+void print(Graph &G)
+{
+	for (auto &v : G.graph)
+	{
+		cout << v.first.id << ": ";
+		for (auto &v2 : v.second)
+		{
+			cout << v2.first.id << " ";
+		}
+		cout << endl;
+	}
+}
+
 int main()
 {
-	int vertices = 10;
+	int vertices = 100;
 	srand(time(NULL));
-	//int edges = rand() % (vertices * (vertices - 1) / 2) + (vertices - 1);
-	int edges = 15;
+	//int edges = rand() % (vertices * (vertices - 1) / 2 - (vertices - 1) + 1) + (vertices - 1);
+	int edges = rand() % (vertices * (vertices - 1) / 4 - (vertices - 1) + 1) + (vertices - 1);
+	//int edges = 40;
+
 	vector<Vertex> Vertices;
 
 	for (int i = 0; i < vertices; i++)
@@ -66,17 +81,7 @@ int main()
 	// 	cout << endl;
 	// }
 
-	for (auto v : G.graph)
-	{
-		cout << v.first.id << ": ";
-		for (auto v2 : v.second)
-		{
-			cout << v2.first.id << " ";
-		}
-		cout << endl;
-		//v.first.id = 3;
-	}
-	cout << endl;
+	//print(G);
 	cout << "edges:" << edges << endl;
 
 	// if (G.BFS(Vertices[3], Vertices[1]))

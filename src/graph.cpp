@@ -55,7 +55,7 @@ public:
     void deleteVertex(Vertex &);
     std::vector<Vertex> getNeighborhood(Vertex &);
 
-    bool addVertex(const Vertex &vertex)
+    void addVertex(const Vertex &vertex)
     {
         graph[vertex] = {}; // O(1);
         // if (graph.find(vertex) == graph.end()) //if graph[vertex.id] not found  // O(n)
@@ -81,7 +81,7 @@ public:
     {
         graph = {};
         vertices = Vertices;
-        for (auto v : Vertices)
+        for (auto &v : Vertices)
         {
             addVertex(v);
         }
@@ -124,7 +124,7 @@ public:
     bool insert_query(const Vertex &u, const Vertex &v)
     {
         Graph I;
-        for (auto n : graph[u]) //for all neighborhoods of u O(m)
+        for (auto &n : graph[u]) //for all neighborhoods of u O(m)
         {
             if (isAdjacent(v, n.first))
             {
@@ -146,7 +146,7 @@ public:
         {
             Graph Aux;
             //x is I[1] vertex
-            for (auto n : graph[I.graph.begin()->first]) //for all n = neighborhoods of x in graph G; O(m)-(very small)
+            for (auto &n : graph[I.graph.begin()->first]) //for all n = neighborhoods of x in graph G; O(m)-(very small)
             {
                 if (!I.isValid(n.first))
                 {
@@ -159,9 +159,9 @@ public:
                 // }
             }
             // std::cout << std::endl;
-            for (auto v : Aux.graph) //add edges from graph G to Aux O(m) (small)
+            for (auto &v : Aux.graph) //add edges from graph G to Aux O(m) (small)
             {
-                for (auto u : Aux.graph)
+                for (auto &u : Aux.graph)
                 {
                     if (isAdjacent(u.first, v.first)) //O(1)
                     {
@@ -202,7 +202,7 @@ public:
             {
                 return true;
             }
-            for (auto n : graph[x])
+            for (auto &n : graph[x])
             {
                 try
                 {
@@ -235,38 +235,50 @@ public:
         //for edges: insert_query;
         int edges = E - (V.size() - 1); //m-(n-1) where (n-1) has been spent on tree edges
         std::cout << "New edges: " << edges << std::endl;
-        while (edges > 0)
+        unsigned int max_degree = (V.size() - 1);
+
+        // for (auto &v : graph)
+        // {
+        //     std::cout << v.first.id << ": ";
+        //     for (auto &v2 : v.second)
+        //     {
+        //         std::cout << v2.first.id << " ";
+        //     }
+        //     std::cout << std::endl;
+        //     //v.first.id = 3;
+        // }
+        //std::cout << std::endl;
+        //int max_degree = 4 + (V.size() / edges);
+
+        while (edges > 0) //Add edge  until desired number is achived
         {
-            for (auto v : graph)
+            std::cout << edges << " out of " << E - (V.size() - 1) << std::endl;
+
+            //Very long method, O(n^2*m) with many colisions
+            for (auto &v : graph)
             {
                 if (edges <= 0)
                     break;
-                if (v.first.id == 0)
+                if (v.second.size() > max_degree)
                 {
-                    std::cout << "0 size:" << v.second.size() << std::endl;
-                }
-                if (v.second.size() > 3)
-                {
-
                     continue;
                 }
-                for (auto u : graph)
+                for (auto &u : graph)
                 {
                     if (edges <= 0)
                         break;
-                    if (u.first.id == 0)
+                    if (v.second.size() > max_degree)
                     {
-                        std::cout << "0 size:" << u.second.size() << std::endl;
+                        break;
                     }
-                    if (u.second.size() > 3)
+                    if (u.second.size() > max_degree)
+                    {
                         continue;
+                    }
                     if (!isAdjacent(v.first, u.first) && !(v.first == u.first))
                     {
-                        //std::cout << "true" << std::endl;
                         if (insert_query(v.first, u.first))
                         {
-                            //std::cout << "adding " << v.first.id << "~" << u.first.id << std::endl;
-                            std::cout << "Edges:" << edges << std::endl;
                             addEdge(v.first, u.first);
                             edges = edges - 1;
                         }
