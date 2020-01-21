@@ -20,11 +20,9 @@ void print(Graph &G)
 
 int main()
 {
-	int vertices = 100;
+	int vertices = 3000;
 	srand(time(NULL));
-	//int edges = rand() % (vertices * (vertices - 1) / 2 - (vertices - 1) + 1) + (vertices - 1);
-	int edges = rand() % (vertices * (vertices - 1) / 4 - (vertices - 1) + 1) + (vertices - 1);
-	//int edges = 40;
+	int edges = vertices * 3;
 
 	vector<Vertex> Vertices;
 
@@ -33,60 +31,10 @@ int main()
 		Vertices.push_back(*(make_shared<Vertex>()));
 	}
 
-	//cout << Vertices.front().id << endl;
-
-	// unordered_map<int, unordered_map<int, double>> A;
-	// unordered_map<int, unordered_map<int, double>> B;
-	// B[1][1] = 11;
-	// B[1][3] = 13;
-	// B[2][4] = 24;
-	// B[3] = {};
-	// A[1] = B[1];
-	// cout << A[1][3] << endl;
-	// if (B.find(4) != B.end())
-	// {
-	// 	cout << "Found" << endl;
-	// }
-	// else
-	// {
-	// 	cout << "Not found" << endl;
-	// }
-
-	// for (auto i : B)
-	// {
-	// 	for (auto j : i.second)
-	// 		cout << j.second << endl;
-	// }
-	// cout << "\n\n";
-
-	//Graph<int> G(Vertices);
-	//G.graph.begin()->first.data = 3;
-	//G.addEdge(Vertices[1], Vertices[3]);
-	//cout << "Random: " << std::next(G.graph.begin(), int(rand() % G.graph.size()))->first.id << endl;
-	//auto it = G.graph.begin();
-	//std::advance(it, int(rand() % G.graph.size()));
-	//it->first.id = 3;
 	Graph G;
-	//cout << std::next(G.graph.begin(), G.graph.size() - 1)->first.id << endl;
+	clock_t t = clock();
 	G.generateChordal(Vertices, edges);
-	// for (auto v : G.graph)
-	// {
-	// 	for (auto u : G.graph)
-	// 	{
-	// 		if (!G.isAdjacent(v.first, u.first))
-	// 		{
-	// 			cout << v.first.id << "!~" << u.first.id << endl;
-	// 		}
-	// 	}
-	// 	cout << endl;
-	// }
-
-	//print(G);
-	cout << "edges:" << edges << endl;
-
-	// if (G.BFS(Vertices[3], Vertices[1]))
-	// {
-	// 	cout << "The " << Vertices[3].id << "~" << Vertices[1].id << " exists!" << endl;
-	// }
-	//cout << hashVertex(Vertices[2]) << endl;
+	t = clock() - t;
+	double time_taken = ((double)t) / CLOCKS_PER_SEC;
+	cout << "time: " << time_taken << "s" << endl;
 }
