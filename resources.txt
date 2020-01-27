@@ -9,7 +9,12 @@ https://sms.math.nus.edu.sg/smsmedley/Vol-12-2/On%20transitively%20orientable%20
 https://core.ac.uk/download/pdf/82826493.pdf
 http://www.cs.haifa.ac.il/~golumbic/courses/seminar-2013graph/sadjad-unit-interval04.pdf
 https://reader.elsevier.com/reader/sd/pii/002001909500046F?token=1B09E2AB63B7097A507206B65D881BC1315EC4900C18D830022F20AA19400398F0ADBB4B8D77AC2BED68673A11B6FE2C
-https://link.springer.com/content/pdf/10.1007/s10479-007-0190-4.pdf
+Graph generation:
+{
+  https://link.springer.com/content/pdf/10.1007/s10479-007-0190-4.pdf
+  https://pantheon.ufrj.br/bitstream/11422/1930/1/13_04_000628638.pdf
+}
+
 
 1. **Chordal graph** - a graph with no induced cycle of size greater than three ([link](https://en.wikipedia.org/wiki/Chordal_graph)) or in other words: chordal graph is one in which all cycles of four or more vertices have a chord
 
@@ -24,6 +29,13 @@ https://link.springer.com/content/pdf/10.1007/s10479-007-0190-4.pdf
 3. LBFS(G, x) -> usual, label given x <- |A| and so on
 
 4. LBFS+(o) -> arbitary vertex, all vertices are in same cell so 1st step is omitted
+
+5. **Unit interval graph** *(uig)* - an undirected graph G is a unit interval graph if there is an interval representation of G in which all the intervals
+have the same length. [Roberts](https://core.ac.uk/download/pdf/82826493.pdf)
+  Интервальные графы являются хордальными и, следовательно, совершенными
+  Единичные интервальные графы — это интервальные графы, имеющее интервальное представление, в котором каждый интервал имеет единичную длину.
+  1. UIG = Indifference graph = special case of chordal
+
 
 5. #### Graph autogeneration
 

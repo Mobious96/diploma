@@ -2,6 +2,7 @@
 #include "graph.cpp"
 #include <time.h>
 #include <memory>
+#include "lbfs.cpp"
 
 using namespace std;
 
@@ -20,9 +21,10 @@ void print(Graph &G)
 
 int main()
 {
-	int vertices = 3000;
+	int vertices = 6;
 	srand(time(NULL));
-	int edges = vertices * 3;
+	int edges = vertices * 2; //having more than certain coefficent will dramatically decrease perfomance
+	//I should try to connect this coefficent with max_degree to uniform distribution
 
 	vector<Vertex> Vertices;
 
@@ -35,6 +37,15 @@ int main()
 	clock_t t = clock();
 	G.generateChordal(Vertices, edges);
 	t = clock() - t;
+	print(G);
 	double time_taken = ((double)t) / CLOCKS_PER_SEC;
-	cout << "time: " << time_taken << "s" << endl;
+	cout << "time: " << time_taken << "s" << endl
+		 << endl;
+
+	auto n = LBFS(G, *(Vertices.end()));
+	for (auto i : n)
+	{
+		cout << i.second.id << ":" << i.first << std::endl;
+		//cout << i.first.id << ":" << i.second << " " << std::endl;
+	}
 }
