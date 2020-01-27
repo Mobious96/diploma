@@ -21,9 +21,9 @@ void print(Graph &G)
 
 int main()
 {
-	int vertices = 6;
+	int vertices = 5;
 	srand(time(NULL));
-	int edges = vertices * 2; //having more than certain coefficent will dramatically decrease perfomance
+	int edges = vertices * 1.5; //having more than certain coefficent will dramatically decrease perfomance
 	//I should try to connect this coefficent with max_degree to uniform distribution
 
 	vector<Vertex> Vertices;
@@ -42,10 +42,26 @@ int main()
 	cout << "time: " << time_taken << "s" << endl
 		 << endl;
 
-	auto n = LBFS(G, *(Vertices.end()));
+	cout << "Start with " << Vertices.end()->id << endl;
+	auto n = LBFS(G, *(Vertices.end())); //NEED TO CALL ARBITARY LBFS TO CHECK IF IT'S CHORDAL
+	cout << "LBFS:" << endl;
 	for (auto i : n)
 	{
 		cout << i.second.id << ":" << i.first << std::endl;
-		//cout << i.first.id << ":" << i.second << " " << std::endl;
+	}
+	auto n2 = LBFSplus(G, n);
+	cout << "LBFSArbitary" << endl;
+	for (auto i : n2)
+	{
+		cout << i.second.id << ":" << i.first << std::endl;
+	}
+
+	if (PEO(G, n2))
+	{
+		cout << "Chordal!" << endl;
+	}
+	else
+	{
+		cout << "Not chordal" << endl;
 	}
 }
