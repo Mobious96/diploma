@@ -262,4 +262,95 @@ public:
             }
         }
     }
+
+    // input: edges number, graph G without vertices inside
+    // output: graph G with vertices and edges
+    void generateNotChordal(std::vector<Vertex> &V, int E)
+    {
+        //generate a tree https://nokyotsu.com/qscripts/2008/05/generating-random-trees-and-connected.html
+        std::vector<Vertex> dst(V);
+        addVertex(dst.back());
+        dst.pop_back();
+        while (!dst.empty())
+        {
+            addEdge(getRandomVertex(), dst.back());
+            dst.pop_back();
+        }
+        //for edges: insert_query;
+        int edges = E - (V.size() - 1); //m-(n-1) where (n-1) has been spent on tree edges
+        unsigned int max_degree = (V.size() - 1);
+        while (edges > 0) //Add edge  until desired number is achived
+        {
+            for (auto &v : graph)
+            {
+                if (edges <= 0)
+                    break;
+                if (v.second.size() > max_degree)
+                {
+                    continue;
+                }
+                for (auto &u : graph)
+                {
+                    if (edges <= 0)
+                        break;
+                    if (v.first == u.first)
+                        continue;
+                    if (v.second.size() > max_degree)
+                    {
+                        break;
+                    }
+                    if (u.second.size() > max_degree)
+                    {
+                        continue;
+                    }
+                    if (!isAdjacent(v.first, u.first))
+                    {
+                        if (insert_query(v.first, u.first))
+                        {
+                            addEdge(v.first, u.first);
+                            edges = edges - 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Addinb bad edges
+        edges = 10;
+        while (edges > 0) //Add edge  until desired number is achived
+        {
+            for (auto &v : graph)
+            {
+                if (edges <= 0)
+                    break;
+                if (v.second.size() > max_degree)
+                {
+                    continue;
+                }
+                for (auto &u : graph)
+                {
+                    if (edges <= 0)
+                        break;
+                    if (v.first == u.first)
+                        continue;
+                    if (v.second.size() > max_degree)
+                    {
+                        break;
+                    }
+                    if (u.second.size() > max_degree)
+                    {
+                        continue;
+                    }
+                    if (!isAdjacent(v.first, u.first))
+                    {
+                        if (!insert_query(v.first, u.first))
+                        {
+                            addEdge(v.first, u.first);
+                            edges = edges - 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
 };
