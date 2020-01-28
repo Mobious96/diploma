@@ -6,6 +6,7 @@
 #include <queue>
 #include <time.h>
 #include <unordered_set>
+#include <random> //uniform_real_distribution
 
 static int vertices_count = 0;
 
@@ -112,6 +113,35 @@ public:
         return false;
     }
 
+    bool IsConnected()
+    {
+        auto u = graph.begin()->first;
+        std::unordered_map<Vertex, bool> labeled;
+        std::queue<Vertex> Q;
+        int count = 0;
+        labeled[u] = true; //u,v are marked by programmer;
+        count = count + 1;
+        Q.push(u);
+        while (!Q.empty())
+        {
+            Vertex x = Q.front();
+            Q.pop();
+            for (auto &n : graph[x])
+            {
+                if (labeled.find(n.first) == labeled.end())
+                {
+                    labeled[n.first] = true;
+                    count = count + 1;
+                    Q.push(n.first);
+                }
+            }
+        }
+        if (count == graph.size())
+        {
+            return true;
+        }
+        return false;
+    }
     bool insert_query(const Vertex &v, const Vertex &u)
     {
         Graph I;
@@ -207,6 +237,64 @@ public:
         {
             addEdge(getRandomVertex(), dst.back());
             dst.pop_back();
+        }
+    }
+
+    //input: graph G without vertices inside; |V| > 0
+    //output: an unit interval graph G with vertices and edges
+    //problems: might be not connected somehow;
+    void generateUIG(std::vector<Vertex> &V)
+    {
+        std::unordered_map<Vertex, std::pair<double, double>> I;
+        //first step: fill the line, size of L with vertices length of 1;
+        srand(time(NULL));
+        int modifier = 2;
+        double L = V.size() / 2;
+        auto u = V.begin();
+        double l = 0;
+        while (l < L)
+        {
+            l = l + 1 - 0.1;
+            //std::cout << l << " ";
+            I[*u] = std::make_pair(l, l + 1);
+            u++;
+        }
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<> dis(0, L - 1);
+        while (u != V.end())
+        {
+            l = dis(gen);
+            //std::cout << l << " ";
+            I[*u] = std::make_pair(l, l + 1);
+            u++;
+        }
+
+        for (auto u : I)
+        {
+            for (auto v : I)
+            {
+                if (u != v)
+                {
+                    if ((v.second.second >= u.second.first) && (v.second.second <= u.second.second))
+                    {
+                        if (!isAdjacent(u.first, v.first))
+                        {
+                            addEdge(u.first, v.first);
+                        }
+                    }
+                    else
+                    {
+                        if ((v.second.first >= u.second.first) && (v.second.first < u.second.second))
+                        {
+                            if (!isAdjacent(u.first, v.first))
+                            {
+                                addEdge(u.first, v.first);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

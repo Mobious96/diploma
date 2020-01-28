@@ -5,6 +5,34 @@
 #include <algorithm> //max_element
 #include <map>
 #include <stack>
+using namespace std;
+
+//O(n^2)
+bool NeighbourhoodCondition(Graph &G, std::map<int, Vertex> &number)
+{
+    for (auto u : G.graph) //O(N)
+    {
+        for (auto it = number.begin(); it != number.end(); it++) // <O(N)
+        {
+            if (u.second.find(it->second) != u.second.end() || (it->second == u.first)) //we've found first element
+            {
+                for (int i = 0; i < u.second.size() + 1; i++)
+                {
+                    if ((u.second.find(it->second) == u.second.end()) && ((it->second.id != u.first.id)))
+                    {
+                        return false;
+                    }
+                    it++;
+                }
+            }
+            if (it == number.end()) //the sad part is that in current stage "it" is the end and cycle 'for' will increment it, so it will be like end++ and then make comparison;
+            {
+                break;
+            }
+        }
+    }
+    return true;
+}
 
 bool PEO(Graph &G, std::map<int, Vertex> &number)
 {
@@ -15,8 +43,6 @@ bool PEO(Graph &G, std::map<int, Vertex> &number)
         std::unordered_set<Vertex> temp; //probably need order here to understand
         temp.insert(u->second);
 
-        //I MUST USE N(ui)AND(uj: j<=i); NOT "OR" FUCKING HELL!!!!!!!!!!!!!!!!!!
-        //PERFECT ELIMINTATION ORDERING DOCUEMNT;
         auto it = number.begin();
         while (it != n)
         {

@@ -21,6 +21,7 @@ void print(Graph &G)
 
 bool ChordalTest()
 {
+	//chordal if and only if the ordering of V produced by any LBFS is a Perfect Elimination Ordering
 	cout << "[///Chordal Test///]" << endl;
 	int vertices = 1000;
 	srand(time(NULL));
@@ -44,13 +45,13 @@ bool ChordalTest()
 
 	t = clock();
 	auto n = LBFS(G, *(Vertices.end())); //NEED TO CALL ARBITARY LBFS TO CHECK IF IT'S CHORDAL
-	auto n2 = LBFSplus(G, n);
+	//auto n2 = LBFSplus(G, n);
 	t = clock() - t;
 	time_taken = ((double)t) / CLOCKS_PER_SEC;
-	cout << "LBFS, LBFS+ time: " << time_taken << "s" << endl;
+	cout << "LBFS time: " << time_taken << "s" << endl;
 
 	t = clock();
-	if (PEO(G, n2))
+	if (PEO(G, n))
 	{
 		t = clock() - t;
 		time_taken = ((double)t) / CLOCKS_PER_SEC;
@@ -91,13 +92,12 @@ bool NotChordalTest()
 
 	t = clock();
 	auto n = LBFS(G, *(Vertices.end())); //NEED TO CALL ARBITARY LBFS TO CHECK IF IT'S CHORDAL
-	auto n2 = LBFSplus(G, n);
 	t = clock() - t;
 	time_taken = ((double)t) / CLOCKS_PER_SEC;
-	cout << "LBFS, LBFS+ time: " << time_taken << "s" << endl;
+	cout << "LBFS time: " << time_taken << "s" << endl;
 
 	t = clock();
-	if (PEO(G, n2))
+	if (PEO(G, n))
 	{
 		t = clock() - t;
 		time_taken = ((double)t) / CLOCKS_PER_SEC;
@@ -113,9 +113,74 @@ bool NotChordalTest()
 	}
 }
 
+void UIGtest()
+{
+	cout << "[///UIG Test///]" << endl;
+	int vertices = 1000;
+	srand(time(NULL));
+	cout << "Vertices: " << vertices << endl;
+	vector<Vertex> Vertices;
+
+	for (int i = 0; i < vertices; i++)
+	{
+		Vertices.push_back(*(make_shared<Vertex>()));
+	}
+
+	Graph G;
+	clock_t t = clock();
+	G.generateUIG(Vertices);
+	t = clock() - t;
+	//print(G);
+	double time_taken = ((double)t) / CLOCKS_PER_SEC;
+	cout << "Generation time: " << time_taken << "s" << endl;
+
+	t = clock();
+	auto n = LBFS(G, *(Vertices.end())); //NEED TO CALL ARBITARY LBFS TO CHECK IF IT'S CHORDAL
+	auto n2 = LBFSplus(G, n);
+	auto n3 = LBFSplus(G, n2);
+	t = clock() - t;
+	time_taken = ((double)t) / CLOCKS_PER_SEC;
+	cout << "LBFS, LBFS+ time: " << time_taken << "s" << endl;
+	// for (auto u : n3)
+	// {
+	// 	std::cout << u.second.id << " ";
+	// }
+	t = clock();
+	if (NeighbourhoodCondition(G, n3))
+	{
+		t = clock() - t;
+		time_taken = ((double)t) / CLOCKS_PER_SEC;
+		cout << "Test time: " << time_taken << "s" << endl;
+		cout << "UIG! That's correct!" << endl;
+	}
+	else
+	{
+		t = clock() - t;
+		time_taken = ((double)t) / CLOCKS_PER_SEC;
+		cout << "Test time: " << time_taken << "s" << endl;
+		cout << "Not UIG! That isn't correct!" << endl;
+	}
+}
+
 int main()
 {
-	ChordalTest();
-	cout << endl;
-	NotChordalTest();
+	UIGtest();
+	// ChordalTest();
+	// cout << endl;
+	// NotChordalTest();
+
+	// int vertices = 1000;
+	// vector<Vertex> Vertices;
+	// int edges = vertices * 1.5;
+	// for (int i = 0; i < vertices; i++)
+	// {
+	// 	Vertices.push_back(*(make_shared<Vertex>()));
+	// }
+
+	// Graph G;
+	// G.generateUIG(Vertices);
+	// if (G.IsConnected())
+	// {
+	// 	cout << "Connected!" << endl;
+	// }
 }
