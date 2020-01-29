@@ -1,11 +1,7 @@
-#include "graph.cpp"
-#include <unordered_map>
-#include <set>
-#include <vector>
-#include <algorithm> //max_element
-#include <map>
-#include <stack>
+#pragma once
+#include "lbfs.h"
 using namespace std;
+
 
 //O(n^2)
 bool NeighbourhoodCondition(Graph &G, std::map<int, Vertex> &number)
@@ -83,6 +79,7 @@ bool PEO(Graph &G, std::map<int, Vertex> &number)
 
 std::map<int, Vertex> LBFS(Graph &G, const Vertex &u)
 {
+    
     std::unordered_map<Vertex, int> label; // to have fast access to appending label
     //it's better because we have label(w) calls much more than picking-largest-label
     //so label(w) costs O(1) and finding largest O(N), otherwise it would cost label(w) O(N) and finding O(1)
@@ -96,12 +93,17 @@ std::map<int, Vertex> LBFS(Graph &G, const Vertex &u)
     label[u] = G.graph.size();
     for (int i = G.graph.size(); i > 0; i--) //O(N)
     {
-        auto &v = std::max_element(label.begin(), label.end(), [](auto &a, auto &b) { //v must be unnumbered
+        auto v = std::max_element(label.begin(), label.end(), [](auto &a, auto &b) { //v must be unnumbered
                       return (a.second < b.second);
                   })
                       ->first; //O(N);
+        if (number.find(v) != number.end())
+        {
+            cout << "LBFS ERROR: WORK WITH NUMBERED VERTEX: " << v.id << " i:" << i << endl;
+        }
         number[v] = G.graph.size() + 1 - i;
         label.erase(v); //unnumber the v;
+       // cout << "v:" << v.id;
         for (auto &w : G.graph[v])
         {
             if (number.find(w.first) == number.end()) //O(1)~O(graph[v].size)
@@ -125,28 +127,49 @@ std::map<int, Vertex> LBFSplus(Graph &G, std::map<int, Vertex> &_number)
     //so label(w) costs O(1) and finding largest O(N), otherwise it would cost label(w) O(N) and finding O(1)
 
     std::unordered_map<Vertex, int> number; //O(1) serach, insert, but requires sorting in the end, which is fast
-    for (auto &v : G.graph)
+   /* for (auto &v : G.graph)
     {
         label[v.first] = 0;
     }
+    cout << "Graph size:" << G.graph.size() << endl;
+    cout << "_number: ";
+    for (auto n : _number)
+    {
+        cout << n.second.id << " ";
+    }
+    cout << endl << "_nunmber size:" << _number.size() << endl;*/
     for (int i = G.graph.size(); i > 0; i--) //O(N)
     {
-        std::stack<Vertex> stack;
+        //std::stack<Vertex> stack;
         auto it = _number.begin();
-        int largest_label = label[it->second];
+        auto largest_vertex = it;
+        int largest_label = 0;
         while (it != _number.end()) //instead should use queue and .end()
         {
-            if (label[it->second] >= largest_label)
+            if (number.find(it->second) == number.end()) //
             {
-                largest_label = label[it->second];
-                stack.push(it->second);
+                if (label[it->second] >= largest_label)
+                {
+                    largest_label = label[it->second];
+                    largest_vertex = it;
+                }
             }
             it++;
         }
-        auto &v = stack.top();
+        auto v = largest_vertex->second;
 
+        /*cout << "v:" << v.id << " label:" << label[v] << endl;
+        for (auto u : number)
+        {
+            cout << u.first.id << " ";
+        }
+        cout << endl;*/
+        if (number.find(v) != number.end())
+        {
+            cout << "LFBS+ ERROR: WORK WITH NUMBERED VERTEX: " << v.id << " i:" << i << endl;
+        }
         number[v] = G.graph.size() + 1 - i;
-        label.erase(v); //unnumber the v;
+        //label.erase(v); //unnumber the v; //we erase, but above it give nno effect since lable[it] add it again;
         for (auto &w : G.graph[v])
         {
             if (number.find(w.first) == number.end()) //O(1)~O(graph[v].size)

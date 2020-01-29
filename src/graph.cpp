@@ -55,8 +55,8 @@ public:
     std::vector<Vertex> vertices;
 
 public:
-    void deleteVertex(Vertex &);
-    std::vector<Vertex> getNeighborhood(Vertex &);
+   // void deleteVertex(Vertex &);
+    //std::vector<Vertex> getNeighborhood(Vertex &);
 
     void addVertex(const Vertex &vertex)
     {

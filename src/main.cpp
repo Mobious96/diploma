@@ -1,10 +1,20 @@
+#pragma once
 #include <iostream>
 #include "graph.cpp"
 #include <time.h>
 #include <memory>
-#include "lbfs.cpp"
+#include "lbfs.h"
 
 using namespace std;
+
+void print(std::map<int, Vertex>& order)
+{
+	for (auto u : order)
+	{
+		cout << u.second.id << " ";
+	}
+	cout << endl;
+}
 
 void print(Graph &G)
 {
@@ -19,7 +29,7 @@ void print(Graph &G)
 	}
 }
 
-bool ChordalTest()
+void ChordalTest()
 {
 	//chordal if and only if the ordering of V produced by any LBFS is a Perfect Elimination Ordering
 	cout << "[///Chordal Test///]" << endl;
@@ -67,7 +77,7 @@ bool ChordalTest()
 	}
 }
 
-bool NotChordalTest()
+void NotChordalTest()
 {
 	cout << "[///Not Chordal Test///]" << endl;
 	int vertices = 1000;
@@ -128,23 +138,26 @@ void UIGtest()
 
 	Graph G;
 	clock_t t = clock();
+	//G.generateNotChordal(Vertices, vertices*1.5);
 	G.generateUIG(Vertices);
 	t = clock() - t;
 	//print(G);
+	//cout << "Graph size:" << G.graph.size() << endl;
 	double time_taken = ((double)t) / CLOCKS_PER_SEC;
 	cout << "Generation time: " << time_taken << "s" << endl;
 
 	t = clock();
-	auto n = LBFS(G, *(Vertices.end())); //NEED TO CALL ARBITARY LBFS TO CHECK IF IT'S CHORDAL
+	//cout << "Graph size:" << G.graph.size() << endl;
+	auto n = LBFS(G, *(Vertices.begin())); //NEED TO CALL ARBITARY LBFS TO CHECK IF IT'S CHORDAL
+	//cout << "Graph size:" << G.graph.size() << endl;
 	auto n2 = LBFSplus(G, n);
 	auto n3 = LBFSplus(G, n2);
 	t = clock() - t;
 	time_taken = ((double)t) / CLOCKS_PER_SEC;
 	cout << "LBFS, LBFS+ time: " << time_taken << "s" << endl;
-	// for (auto u : n3)
-	// {
-	// 	std::cout << u.second.id << " ";
-	// }
+	//print(n);
+	//print(n2);
+	//print(n3);
 	t = clock();
 	if (NeighbourhoodCondition(G, n3))
 	{
@@ -160,10 +173,29 @@ void UIGtest()
 		cout << "Test time: " << time_taken << "s" << endl;
 		cout << "Not UIG! That isn't correct!" << endl;
 	}
+	t = clock();
+	if (PEO(G, n))
+	{
+		t = clock() - t;
+		time_taken = ((double)t) / CLOCKS_PER_SEC;
+		cout << "PEO time: " << time_taken << "s" << endl;
+		cout << "Chordal! That is correct!" << endl;
+	}
+	else
+	{
+		t = clock() - t;
+		time_taken = ((double)t) / CLOCKS_PER_SEC;
+		cout << "PEO time: " << time_taken << "s" << endl;
+		cout << "Not chordal! That isn't correct!" << endl;
+	}
 }
 
 int main()
 {
+	unordered_map<int, int> A;
+	A[0] = 1;
+	A[0] = 2;
+	cout << "A size:" << A.size() << endl;
 	UIGtest();
 	// ChordalTest();
 	// cout << endl;
@@ -183,4 +215,5 @@ int main()
 	// {
 	// 	cout << "Connected!" << endl;
 	// }
+	system("pause");
 }
