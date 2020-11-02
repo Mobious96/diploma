@@ -9,6 +9,7 @@ https://sms.math.nus.edu.sg/smsmedley/Vol-12-2/On%20transitively%20orientable%20
 https://core.ac.uk/download/pdf/82826493.pdf
 http://www.cs.haifa.ac.il/~golumbic/courses/seminar-2013graph/sadjad-unit-interval04.pdf
 https://reader.elsevier.com/reader/sd/pii/002001909500046F?token=1B09E2AB63B7097A507206B65D881BC1315EC4900C18D830022F20AA19400398F0ADBB4B8D77AC2BED68673A11B6FE2C
+
 Graph generation:
 {
   https://link.springer.com/content/pdf/10.1007/s10479-007-0190-4.pdf
@@ -37,7 +38,7 @@ have the same length. [Roberts](https://core.ac.uk/download/pdf/82826493.pdf)
   1. UIG = Indifference graph = special case of chordal
 
 
-5. #### Graph autogeneration
+#### Graph autogeneration
 
 1. [Here](https://link.springer.com/content/pdf/10.1007/s10479-007-0190-4.pdf) at **procedure** insert_query we have "*G + (u,v) is chordal, if..*" but actually it's "*G + (u,v) preserves chordality*" which means, that it not ruins it, but it not fulfilll it (? - no, iy\s all correct because we start from a tree and it will njot connect vertices which are violating chordailty);
 
